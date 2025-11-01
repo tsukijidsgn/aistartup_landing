@@ -70,7 +70,3 @@ The site is automatically deployed when you push to the `main` branch.
 ├── public/           # Static assets
 └── styles/          # Global styles
 ```
-
-## License
-
-MIT
