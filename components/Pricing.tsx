@@ -99,7 +99,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              ref={(el) => (cardRefs.current[index] = el)}
+              ref={(el) => { cardRefs.current[index] = el; }}
               className={`relative p-6 sm:p-8 rounded-xl border transition-all duration-500 hover:-translate-y-2 ${
                 plan.popular
                   ? 'bg-gradient-to-br from-gray-900 to-black border-ai-green shadow-lg shadow-ai-green/20 md:scale-105 hover:scale-110'

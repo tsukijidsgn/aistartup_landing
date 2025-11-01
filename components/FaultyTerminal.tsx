@@ -1,5 +1,5 @@
 import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback, MutableRefObject } from 'react';
 
 type Vec2 = [number, number];
 
@@ -257,11 +257,11 @@ export default function FaultyTerminal({
   ...rest
 }: FaultyTerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const programRef = useRef<Program>(null);
-  const rendererRef = useRef<Renderer>(null);
-  const mouseRef = useRef({ x: 0.5, y: 0.5 });
-  const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
-  const frozenTimeRef = useRef(0);
+  const programRef = useRef<Program | null>(null) as MutableRefObject<Program | null>;
+  const rendererRef = useRef<Renderer | null>(null) as MutableRefObject<Renderer | null>;
+  const mouseRef = useRef<{ x: number; y: number }>({ x: 0.5, y: 0.5 });
+  const smoothMouseRef = useRef<{ x: number; y: number }>({ x: 0.5, y: 0.5 });
+  const frozenTimeRef = useRef<number>(0);
   const rafRef = useRef<number>(0);
   const loadAnimationStartRef = useRef<number>(0);
   const timeOffsetRef = useRef<number>(Math.random() * 100);
@@ -371,7 +371,8 @@ export default function FaultyTerminal({
     };
 
     rafRef.current = requestAnimationFrame(update);
-    ctn.appendChild(gl.canvas);
+    const canvas = gl.canvas as HTMLCanvasElement;
+    ctn.appendChild(canvas);
 
     if (mouseReact) ctn.addEventListener('mousemove', handleMouseMove);
 
@@ -379,7 +380,7 @@ export default function FaultyTerminal({
       cancelAnimationFrame(rafRef.current);
       resizeObserver.disconnect();
       if (mouseReact) ctn.removeEventListener('mousemove', handleMouseMove);
-      if (gl.canvas.parentElement === ctn) ctn.removeChild(gl.canvas);
+      if (canvas.parentElement === ctn) ctn.removeChild(canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
       loadAnimationStartRef.current = 0;
       timeOffsetRef.current = Math.random() * 100;

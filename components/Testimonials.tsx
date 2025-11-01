@@ -68,7 +68,7 @@ export default function Testimonials() {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              ref={(el) => (itemRefs.current[index] = el)}
+              ref={(el) => { itemRefs.current[index] = el; }}
               className={`p-6 sm:p-8 bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 hover:border-ai-green/50 transition-all duration-500 hover:shadow-lg hover:shadow-ai-green/10 hover:-translate-y-2 ${
                 visibleItems.has(index) ? 'animate-fade-in-up opacity-100' : 'opacity-0 translate-y-10'
               }`}

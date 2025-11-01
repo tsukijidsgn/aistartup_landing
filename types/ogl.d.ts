@@ -17,18 +17,18 @@ declare module 'ogl' {
 
   export class Renderer {
     gl: WebGLRenderingContext | WebGL2RenderingContext;
-    canvas: HTMLCanvasElement;
+    canvas: HTMLCanvasElement | OffscreenCanvas;
     dpr: number;
     extensions: any;
     extensionsCache: any;
     state: any;
     attributeState: any;
     bounds: { width: number; height: number };
-    extensionsCache: any;
 
     constructor(options?: RendererOptions);
     setSize(width: number, height: number): void;
     render(scene: Mesh, camera?: Camera): void;
+    render(options: { scene: Mesh; camera?: Camera }): void;
     getExtension(extension: string): any;
     reset(): void;
   }
@@ -70,13 +70,16 @@ declare module 'ogl' {
     rotation: any;
     quaternion: any;
 
-    constructor(options?: {
-      geometry?: Geometry;
-      program?: Program;
-      mode?: number;
-      frustumCulled?: boolean;
-      renderOrder?: number;
-    });
+    constructor(
+      gl: WebGLRenderingContext | WebGL2RenderingContext,
+      options?: {
+        geometry?: Geometry;
+        program?: Program;
+        mode?: number;
+        frustumCulled?: boolean;
+        renderOrder?: number;
+      }
+    );
     setParent(parent: Mesh | null): void;
     addChild(child: Mesh): void;
     removeChild(child: Mesh): void;
@@ -99,6 +102,10 @@ declare module 'ogl' {
     remove(): void;
   }
 
+  export class Triangle extends Geometry {
+    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext);
+  }
+
   export class Color {
     r: number;
     g: number;
@@ -110,13 +117,8 @@ declare module 'ogl' {
     copy(color: Color): void;
   }
 
-  export class Triangle {
-    a: number[];
-    b: number[];
-    c: number[];
-    normal: number[];
-
-    constructor(a?: number[], b?: number[], c?: number[]);
+  export class Triangle extends Geometry {
+    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext);
   }
 
   export class Camera {
